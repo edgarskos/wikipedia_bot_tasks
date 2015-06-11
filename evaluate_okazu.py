@@ -6,7 +6,7 @@ import re
 import requests
 import json
 
-okazu_search = re.compile('http://okazu.blogspot.com/(?P<year>\d{4})/(?P<month>\d{2})/(?P<title>.*?)\.html')
+okazu_search = re.compile('http://okazu.blogspot.com/.*?\.html')
 found_matches = {}
 exempt_pages = [ 'Wikipedia:Bot requests'
 ]
@@ -28,7 +28,7 @@ def evaluatePage(this_page):
     for match in matches:
         fixed_url = lookup_match(match)
         if fixed_url is not None:
-            old_url = 'http://okazu.blogspot.com/%s/%s/%s.html' % match
+            old_url = match
             page_text = page_text.replace(old_url,fixed_url)
     this_page.put(page_text,
         comment='HasteurBot 10: Replacing okazu.blogspot.com refs with yuricon.com equivilants',
@@ -36,18 +36,18 @@ def evaluatePage(this_page):
     )
 def lookup_match(match):
     print match
-    compound_key = ''.join(match)
+    compound_key = match
     if found_matches.has_key(compound_key):
         #We've already found this replacement
         return found_matches[compound_key]
     else:
         #Time to look up the replacement from the new site
-        for i in range(1,32):
-            req_string = 'http://okazu.yuricon.com/'+match[0]+'/'+match[1]+"/%02d/"%i+match[2]+'/'
-            r = requests.get(req_string)
-            if r.status_code == 200:
-                found_matches[compound_key] = req_string
-                return req_string
+        req_string = 'http://okazu.yuricon.com/?b2w='+match
+        print req_string
+        r = requests.get(req_string)
+        if r.status_code == 200:
+            found_matches[compound_key] = r.url
+            return r.url
 def find_pages():
     genFactory = pg.GeneratorFactory()
     genFactory.handleArg("-weblink:*.okazu.blogspot.com")
