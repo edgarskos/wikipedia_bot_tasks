@@ -42,7 +42,7 @@ def lookup_match(match):
         return found_matches[compound_key]
     else:
         #Time to look up the replacement from the new site
-        for i in range(1,31):
+        for i in range(1,32):
             req_string = 'http://okazu.yuricon.com/'+match[0]+'/'+match[1]+"/%02d/"%i+match[2]+'/'
             r = requests.get(req_string)
             if r.status_code == 200:
