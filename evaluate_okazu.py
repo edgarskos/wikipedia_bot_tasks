@@ -28,8 +28,12 @@ def evaluatePage(this_page):
     for match in matches:
         fixed_url = lookup_match(match)
         if fixed_url is not None:
-            page_text = page_text.replace(match[1],fixed_url[0])
-        #this_page.put(page_text,'Test')
+            old_url = 'http://okazu.blogspot.com/%s/%s/%s.html' % match
+            page_text = page_text.replace(old_url,fixed_url)
+    this_page.put(page_text,
+        comment='HasteurBot 10: Replacing okazu.blogspot.com refs with yuricon.com equivilants',
+        minorEdit=False
+    )
 def lookup_match(match):
     print match
     compound_key = ''.join(match)
