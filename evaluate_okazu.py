@@ -26,6 +26,9 @@ def evaluatePage(this_page):
     elif "archive" in page_title:
         print "%s is an archived page, not changing" % page_title
         return
+    elif "Articles for deletion" in page_title:
+        print "%s is an AfD page, not changing" % page_title
+        return
     page_text = this_page.get()
     matches = okazu_search.findall(page_text)
     for match in matches:
