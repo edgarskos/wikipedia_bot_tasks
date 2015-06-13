@@ -23,6 +23,9 @@ def evaluatePage(this_page):
     elif "Archive" in page_title:
         print "%s is an archived page, not changing" % page_title
         return
+    elif "archive" in page_title:
+        print "%s is an archived page, not changing" % page_title
+        return
     page_text = this_page.get()
     matches = okazu_search.findall(page_text)
     for match in matches:
@@ -43,7 +46,6 @@ def lookup_match(match):
     else:
         #Time to look up the replacement from the new site
         req_string = 'http://okazu.yuricon.com/?b2w='+match
-        print req_string
         r = requests.get(req_string)
         if r.status_code == 200:
             found_matches[compound_key] = r.url
